@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <link rel="icon" href="MHlogo.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    /* General styles */
+body {
+    font-family: Arial, sans-serif;
+    background: url(anime.jpg) no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 15px;
+    display: flex;
+    align-items: left; 
+    gap: 50px; 
+    padding: 10px;
+}
+
+.navbar img {
+    height: 50px; 
+    width: 50px;
+    padding: 4px;
+    padding-right: -410px;
+    border: 1px solid white;
+}
+
+
+.logo {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    align-items: left;
+    padding-left: -100px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li {
+    position: relative;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+}
+
+.nav-links a:hover {
+    color: #ffcc00;
+    font-size: 18px;
+    transition: .7s;
+}
+
+.dropdown li {
+    padding: 1px;
+}
+
+.dropdown li:hover{
+    transition: .15s;
+}
+
+.dropdown a {
+    color: black;
+}
+
+/* Dropdown styling for Get Contact */
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 0;
+    background-color: white;
+    list-style: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.nav-links li:hover .dropdown {
+    display: block;
+}
+.container {
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    margin: 50px auto;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px 0px #000;
+}
+
+h2 {
+    text-align: center;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+input, textarea, select {
+    width: 96%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    color: #000;
+}
+
+button {
+    width: 100%;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
+}
+@media(max-width: 700px){
+    .navbar{
+        display: block;
+        padding: 15px;
+        width: 100%;
+    }
+    .logo{
+        padding: 0;
+        font-size: 23px;
+        text-align: left;
+    }
+    nav ul{
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+    nav ul li{
+        margin: 0 5px;    
+        font-size: 15px;
+        padding: 4px;
+    }
+    .dropdown{
+        top: 20px;
+        left: 0;
+        width: 100%;
+    }
+    .container{
+        padding: 20px;
+        width: 330px;
+    }
+    label{
+        width: 300px;
+    }
+    input{
+        width: 315px;
+    }
+    button{
+        width: 315px;
+    }
+    textarea{
+        width: 315px;
+    }
+}
+
+</style>
+<body>
+    <nav class="navbar">
+        <div class="logo">Mentor Hub</div>
+        <ul class="nav-links">
+            <li><a href="index.html">🏠Home</a></li>
+            <li><a href="about.html">🤝🏻About</a></li>
+            <li><a href="#">📞Get Contact</a>
+                <ul class="dropdown">
+                    <li><a href="#">9467383389</a></li>
+                    <li><a href="#">9565363588</a></li>
+                </ul>
+            </li>
+            <li><a href="gallery.html">🖼️Gallery</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h2>Student Profile</h2>
+        <form id="profileForm">
+            <label for="profileName">Name</label>
+            <input type="text" id="profileName" disabled>
+
+            <label for="profileEmail">Email</label>
+            <input type="email" id="profileEmail" disabled>
+
+            <label for="profileDOB">DOB</label>
+            <input type="date" id="profileDOB" disabled>
+
+            <label for="profileGender">Gender</label>
+            <input type="text" id="profileGender" disabled>
+
+            <label for="profileAddress">Address</label>
+            <textarea id="profileAddress" disabled></textarea>
+
+            <label for="profilePursuing">Pursuing</label>
+            <input type="text" id="profilePursuing" disabled>
+
+            <label for="profileSubjects">Interested Subjects</label>
+            <input type="text" id="profileSubjects" disabled>
+
+            <label for="profileSports">Interested in Sports</label>
+            <input type="text" id="profileSports" disabled>
+
+            <label for="profileSports">Teaching mode</label>
+            <input type="text" id="profileTeaching" disabled>
+
+            <label for="profileSports">Annual Income</label>
+            <input type="text" id="profileAnnual" disabled>
+
+            <button type="button" id="editBtn">Edit</button>
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const profileData = JSON.parse(localStorage.getItem("studentProfile")) || {};
+        
+            // Populate fields
+            document.getElementById("profileName").value = profileData.name || "";
+            document.getElementById("profileEmail").value = profileData.email || "";
+            document.getElementById("profileDOB").value = profileData.dob || "";
+            document.getElementById("profileGender").value = profileData.gender || "";
+            document.getElementById("profileAddress").value = profileData.address || "";
+            document.getElementById("profilePursuing").value = profileData.pursuing || "";
+            document.getElementById("profileSubjects").value = profileData.subjects || "";
+            document.getElementById("profileSports").value = profileData.sports || "";
+            document.getElementById("profileTeaching").value = profileData.teaching || "";
+            document.getElementById("profileAnnual").value = profileData.annual || "";
+        
+            // Enable editing
+            document.getElementById("editBtn").addEventListener("click", function () {
+                document.querySelectorAll("#profileForm input, textarea").forEach(field => {
+                    if (!field.disabled) field.removeAttribute("readonly");
+                });
+            });
+        
+            // Save updated data
+            document.getElementById("profileForm").addEventListener("submit", function (e) {
+                e.preventDefault();
+        
+                const updatedData = {
+                    name: document.getElementById("profileName").value,
+                    email: document.getElementById("profileEmail").value,
+                    dob: document.getElementById("profileDOB").value,
+                    gender: document.getElementById("profileGender").value,
+                    address: document.getElementById("profileAddress").value,
+                    pursuing: document.getElementById("profilePursuing").value,
+                    subjects: document.getElementById("profileSubjects").value,
+                    sports: document.getElementById("profileSports").value,
+                };
+        
+                localStorage.setItem("studentProfile", JSON.stringify(updatedData)); // Save updated data
+                alert("Profile updated successfully!");
+            });
+        });
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            const profileForm = document.getElementById("profileForm");
+            const editBtn = document.getElementById("editBtn");
+            const inputs = profileForm.querySelectorAll("input, textarea");
+
+            function loadProfile() {
+                inputs.forEach(input => {
+                    const savedValue = localStorage.getItem(input.id);
+                    if (savedValue) {
+                        input.value = savedValue;
+                    }
+                });
+            }
+            
+            loadProfile();
+
+            editBtn.addEventListener("click", function() {
+                inputs.forEach(input => input.removeAttribute("disabled"));
+            });
+
+            profileForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+                inputs.forEach(input => {
+                    localStorage.setItem(input.id, input.value);
+                });
+                alert("Profile saved successfully!");
+                inputs.forEach(input => input.setAttribute("disabled", "true"));
+            });
+        });
+    </script>
+</body>
+</html>
