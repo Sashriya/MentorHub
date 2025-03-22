@@ -184,7 +184,7 @@ button:hover {
 </style>
 <body>
     <nav class="navbar">
-        <div class="logo">Mentor Hub</div>
+        <div class="logo" align="center">Mentor Hub</div>
         <ul class="nav-links">
             <li><a href="index.html">🏠Home</a></li>
             <li><a href="about.html">🤝🏻About</a></li>
@@ -195,6 +195,7 @@ button:hover {
                 </ul>
             </li>
             <li><a href="gallery.html">🖼️Gallery</a></li>
+            <li><a href="#" id="logoutBtn" onclick="logoutUser()">🚪Logout</a></li>
         </ul>
     </nav>
     
@@ -236,8 +237,22 @@ button:hover {
         </form>
     </div>
     
+    <script src="script.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        // Authentication check
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if user is logged in, redirect to login if not
+            if (!checkAuth()) {
+                return;
+            }
+            
+            // Display user info if needed
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                console.log("Logged in as: " + currentUser.username);
+            }
+            
+            // Load profile data
             const profileData = JSON.parse(localStorage.getItem("studentProfile")) || {};
         
             // Populate fields
@@ -255,7 +270,7 @@ button:hover {
             // Enable editing
             document.getElementById("editBtn").addEventListener("click", function () {
                 document.querySelectorAll("#profileForm input, textarea").forEach(field => {
-                    if (!field.disabled) field.removeAttribute("readonly");
+                    field.removeAttribute("disabled");
                 });
             });
         
@@ -272,40 +287,17 @@ button:hover {
                     pursuing: document.getElementById("profilePursuing").value,
                     subjects: document.getElementById("profileSubjects").value,
                     sports: document.getElementById("profileSports").value,
+                    teaching: document.getElementById("profileTeaching").value,
+                    annual: document.getElementById("profileAnnual").value
                 };
         
                 localStorage.setItem("studentProfile", JSON.stringify(updatedData)); // Save updated data
                 alert("Profile updated successfully!");
-            });
-        });
-        
-        document.addEventListener("DOMContentLoaded", function() {
-            const profileForm = document.getElementById("profileForm");
-            const editBtn = document.getElementById("editBtn");
-            const inputs = profileForm.querySelectorAll("input, textarea");
-
-            function loadProfile() {
-                inputs.forEach(input => {
-                    const savedValue = localStorage.getItem(input.id);
-                    if (savedValue) {
-                        input.value = savedValue;
-                    }
+                
+                // Disable fields after saving
+                document.querySelectorAll("#profileForm input, textarea").forEach(field => {
+                    field.setAttribute("disabled", "true");
                 });
-            }
-            
-            loadProfile();
-
-            editBtn.addEventListener("click", function() {
-                inputs.forEach(input => input.removeAttribute("disabled"));
-            });
-
-            profileForm.addEventListener("submit", function(event) {
-                event.preventDefault();
-                inputs.forEach(input => {
-                    localStorage.setItem(input.id, input.value);
-                });
-                alert("Profile saved successfully!");
-                inputs.forEach(input => input.setAttribute("disabled", "true"));
             });
         });
     </script>

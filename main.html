@@ -180,6 +180,7 @@
             <li><a href="index.html">🏠Home</a></li>
             <li><a href="about.html">🤝🏻About Us</a></li>
             <li><a href="profile.html">👤Profile</a></li>
+            <li><a href="#" id="logoutBtn" onclick="logoutUser()">🚪Logout</a></li>
         </ul>
     </nav>
 
@@ -196,7 +197,23 @@
         <center><a href="admingallery.html" class="view-gallery">View Gallery</a></center>
     </div>
 
+    <script src="script.js"></script>
     <script>
+        // Check if user is logged in
+        document.addEventListener("DOMContentLoaded", function() {
+            // This will redirect to login page if not authenticated
+            if (!checkAuth()) {
+                return;
+            }
+            
+            // Display user info if available
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                // You can add username display code here if needed
+                console.log("Logged in as: " + currentUser.username);
+            }
+        });
+
         function savePhoto() {
             const fileInput = document.getElementById('photoUpload');
             const description = document.getElementById('photoDescription').value;
