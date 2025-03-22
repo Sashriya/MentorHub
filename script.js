@@ -202,3 +202,238 @@ document.getElementById("registerBtn").addEventListener("click", function(event)
     // Redirect to Profile Page
     window.location.href = "stuprofile.html";
 });
+
+// Authentication System
+// User storage and authentication functions
+
+/**
+ * Registers a new user and stores their credentials in localStorage
+ * @param {string} username - The username
+ * @param {string} email - The user's email
+ * @param {string} password - The user's password
+ * @param {string} role - The user's role (student/tutor)
+ * @returns {boolean} - Whether registration was successful
+ */
+function registerNewUser(username, email, password, role) {
+    // Get existing users or initialize empty array
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    
+    // Check if username or email already exists
+    const existingUser = users.find(user => 
+        user.username === username || user.email === email
+    );
+    
+    if (existingUser) {
+        return false; // Username or email already taken
+    }
+    
+    // Create a new user object with hashed password
+    // In a real app, you'd use a proper hashing function, but we'll use a simple one here
+    const hashedPassword = simpleHash(password);
+    const newUser = {
+        username,
+        email,
+        password: hashedPassword,
+        role,
+        createdAt: new Date().toISOString()
+    };
+    
+    // Add user to array and save back to localStorage
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+    
+    return true;
+}
+
+/**
+ * Authenticates a user based on username and password
+ * @param {string} username - The username
+ * @param {string} password - The password
+ * @returns {object|null} - User object if authenticated, null otherwise
+ */
+function loginUser(username, password) {
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const hashedPassword = simpleHash(password);
+    
+    // Find user with matching credentials
+    const user = users.find(user => 
+        user.username === username && user.password === hashedPassword
+    );
+    
+    if (user) {
+        // Create session
+        const session = {
+            userId: user.username,
+            role: user.role,
+            loggedInAt: new Date().toISOString(),
+            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hour expiry
+        };
+        
+        localStorage.setItem('currentSession', JSON.stringify(session));
+        return user;
+    }
+    
+    return null;
+}
+
+/**
+ * Checks if a user is currently logged in
+ * @returns {boolean} - Whether a user is logged in
+ */
+function isLoggedIn() {
+    const session = JSON.parse(localStorage.getItem('currentSession'));
+    
+    if (!session) {
+        return false;
+    }
+    
+    // Check if session has expired
+    const now = new Date();
+    const expiry = new Date(session.expiresAt);
+    
+    if (now > expiry) {
+        // Session expired, clear it
+        localStorage.removeItem('currentSession');
+        return false;
+    }
+    
+    return true;
+}
+
+/**
+ * Gets the current logged in user info
+ * @returns {object|null} - User object if logged in, null otherwise
+ */
+function getCurrentUser() {
+    if (!isLoggedIn()) {
+        return null;
+    }
+    
+    const session = JSON.parse(localStorage.getItem('currentSession'));
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    
+    return users.find(user => user.username === session.userId) || null;
+}
+
+/**
+ * Logs out the current user
+ */
+function logoutUser() {
+    localStorage.removeItem('currentSession');
+    window.location.href = 'index.html';
+}
+
+/**
+ * Simple hash function for passwords
+ * Note: This is NOT secure for production. Use a proper hashing library in real apps.
+ * @param {string} str - String to hash
+ * @returns {string} - Hashed string
+ */
+function simpleHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString(16); // Convert to hex string
+}
+
+// Protect routes that require authentication
+function checkAuth() {
+    // List of pages that require authentication
+    const protectedPages = [
+        'main.html',
+        'profile.html',
+        'stuprofile.html'
+    ];
+    
+    // Get current page filename
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    // Check if current page is protected
+    if (protectedPages.includes(currentPage) && !isLoggedIn()) {
+        // Not logged in, redirect to login page
+        window.location.href = 'register.html';
+        return false;
+    }
+    
+    return true;
+}
+
+// Run auth check when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuth();
+});
+
+/**
+ * Checks if the current user is an admin
+ * @returns {boolean} - Whether the user is an admin
+ */
+function isAdmin() {
+    const currentUser = getCurrentUser();
+    return currentUser && currentUser.role === 'admin';
+}
+
+/**
+ * Gets all registered users (admin only function)
+ * @returns {Array} - Array of users or empty array if not admin
+ */
+function getAllUsers() {
+    if (!isAdmin()) {
+        return [];
+    }
+    return JSON.parse(localStorage.getItem('users')) || [];
+}
+
+/**
+ * Deletes a user (admin only function)
+ * @param {string} username - Username of user to delete
+ * @returns {boolean} - Success status
+ */
+function deleteUser(username) {
+    if (!isAdmin()) {
+        return false;
+    }
+    
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const filteredUsers = users.filter(user => user.username !== username);
+    
+    if (users.length === filteredUsers.length) {
+        // No user was removed
+        return false;
+    }
+    
+    localStorage.setItem('users', JSON.stringify(filteredUsers));
+    return true;
+}
+
+/**
+ * Creates or updates admin user
+ * This should be called only once to create the first admin
+ */
+function createAdminUser() {
+    // Check if admin already exists
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const adminExists = users.some(user => user.role === 'admin');
+    
+    if (!adminExists) {
+        // Create admin user with default credentials (change in production!)
+        const hashedPassword = simpleHash('admin123');
+        const adminUser = {
+            username: 'admin',
+            email: 'admin@mentorhub.com',
+            password: hashedPassword,
+            role: 'admin',
+            createdAt: new Date().toISOString()
+        };
+        
+        users.push(adminUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        console.log('Admin user created successfully');
+    }
+}
+
+// Create admin user when the script loads
+// This ensures there's always an admin account available
+createAdminUser();

@@ -108,6 +108,12 @@
             text-align: center;
             margin-top: 10px;
         }
+        .error-message {
+            display: none;
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
         .whatsapp-button {
             position: fixed;
             bottom: 20px;
@@ -191,7 +197,7 @@
     </nav>
     
     <div class="login-container">
-        <form class="login-form" onsubmit="return loginUser(event)">
+        <form class="login-form" onsubmit="return handleLogin(event)">
             <h2>User Login</h2>
             <div class="input-group">
                 <label for="username">Username</label>
@@ -203,8 +209,12 @@
             </div>
             <button type="submit" class="login-btn">Login</button>
             <div class="success-message" id="successMessage">Login Successful! 🎉</div>
+            <div class="error-message" id="errorMessage" style="display: none; color: red; text-align: center; margin-top: 10px;">Invalid username or password</div>
             <div class="signup-link">
                 <p>Don't have an account? <a href="sign_up.html">Sign up</a></p>
+            </div>
+            <div class="admin-link" id="adminLink" style="display: none; text-align: center; margin-top: 10px;">
+                <a href="admin.html" style="color: blue; text-decoration: underline;">Access Admin Dashboard</a>
             </div>
         </form>
     </div>
@@ -213,13 +223,47 @@
         <img src="whatsapp.png" alt="WhatsApp">
     </a>
 
+    <script src="script.js"></script>
     <script>
-        function loginUser(event) {
+        function handleLogin(event) {
             event.preventDefault();
-            document.getElementById("successMessage").style.display = "block";
-            setTimeout(() => {
-                window.location.href = "main.html";
-            }, 2000); 
+            
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            
+            // Use the authentication function from script.js
+            const user = loginUser(username, password);
+            
+            if (user) {
+                // Show success message
+                document.getElementById("successMessage").style.display = "block";
+                document.getElementById("errorMessage").style.display = "none";
+                
+                // Show admin link if admin user
+                if (user.role === 'admin') {
+                    document.getElementById("adminLink").style.display = "block";
+                }
+                
+                // Redirect based on user role
+                setTimeout(() => {
+                    if (user.role === 'admin') {
+                        window.location.href = "admin.html";
+                    } else if (user.role === "student") {
+                        window.location.href = "stuprofile.html";
+                    } else if (user.role === "tutor") {
+                        window.location.href = "profile.html";
+                    } else {
+                        window.location.href = "main.html";
+                    }
+                }, 2000);
+                
+                return true;
+            } else {
+                // Show error message
+                document.getElementById("errorMessage").style.display = "block";
+                document.getElementById("successMessage").style.display = "none";
+                return false;
+            }
         }
     </script>
 </body>
