@@ -200,7 +200,7 @@
         <form class="login-form" onsubmit="return handleLogin(event)">
             <h2>User Login</h2>
             <div class="input-group">
-                <label for="username">Username</label>
+                <label for="username">Email or Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter your username" required>
             </div>
             <div class="input-group">
@@ -248,10 +248,6 @@
                 setTimeout(() => {
                     if (user.role === 'admin') {
                         window.location.href = "admin.html";
-                    } else if (user.role === "student") {
-                        window.location.href = "stuprofile.html";
-                    } else if (user.role === "tutor") {
-                        window.location.href = "profile.html";
                     } else {
                         window.location.href = "main.html";
                     }
