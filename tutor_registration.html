@@ -234,6 +234,7 @@
 <body>
     <div class="container">
         <h2>Register</h2>
+        <form id="registrationForm">  <!-- Added form tag -->
             <label for="name">Name</label>
             <input type="text" id="name" name="name" required>
 
@@ -290,47 +291,43 @@
                 <label for="terms">I agree to the <a href="#">Terms and Conditions</a></label>
             </div>
 
-            <button type="submit" id="registrationForm">Register</button>
-        </div>
+            <button type="submit">Register</button>
+        </form>  <!-- Closing form tag -->
+    </div>
+
     <script>
-       document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById("registrationForm").addEventListener("submit", function (event) {
-        event.preventDefault();
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("registrationForm").addEventListener("submit", function (event) {
+                event.preventDefault();
 
-        // Collect form data
-        const formData = {
-            name: document.getElementById("name")?.value.trim(),
-            email: document.getElementById("email")?.value.trim(),
-            date: document.getElementById("date")?.value,
-            gender: document.querySelector('input[name="gender"]:checked')?.value || "",
-            address: document.getElementById("address")?.value.trim(),
-            qualification: document.getElementById("qualification")?.value.trim(),
-            role: document.getElementById("role")?.value,
-            willing: document.querySelector('input[name="willing"]:checked')?.value || "",
-            teaching: document.querySelector('input[name="teaching"]:checked')?.value || ""
-        };
+                // Collect form data
+                const formData = {
+                    name: document.getElementById("name")?.value.trim(),
+                    email: document.getElementById("email")?.value.trim(),
+                    date: document.getElementById("date")?.value,
+                    gender: document.querySelector('input[name="gender"]:checked')?.value || "",
+                    address: document.getElementById("address")?.value.trim(),
+                    qualification: document.getElementById("qualification")?.value.trim(),
+                    role: document.getElementById("role")?.value,
+                    willing: document.querySelector('input[name="willing"]:checked')?.value || "",
+                    teaching: document.querySelector('input[name="teaching"]:checked')?.value || ""
+                };
 
-        // Validate required fields
-        if (!formData.name || !formData.email || !formData.date || !formData.gender || !formData.address || !formData.qualification || !formData.role) {
-            alert("Please fill in all required fields.");
-            return;
-        }
+                // Validate required fields
+                if (!formData.name || !formData.email || !formData.date || !formData.gender || !formData.address || !formData.qualification || !formData.role) {
+                    alert("Please fill in all required fields.");
+                    return;
+                }
 
-        // Store in local storage
-        localStorage.setItem("profileData", JSON.stringify(formData));
+                // Store in local storage
+                localStorage.setItem("profileData", JSON.stringify(formData));
 
-        alert("Registration Successful!");
-        
-        // Redirect to profile page
-        window.location.href="profile.html";
-    });
-});
+                alert("Registration Successful!");
 
+                // Redirect to profile page
+                window.location.href="profile.html";
+            });
+        });
     </script>
-        
-
-    <script src="script.js"></script>
-
-   
 </body>
 </html>
