@@ -1,4 +1,4 @@
-document.getElementById("registrationForm").addEventListener("submit", function(event) {
+document.getElementById("registrationsForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
     let name = document.getElementById("name").value.trim();
@@ -108,25 +108,37 @@ function navigateToPage() {
     }
 }
 
-document.getElementById("registrationForm").addEventListener("submit", function (event) {
-    event.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("registrationForm").addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    const formData = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        date: document.getElementById("date").value,
-        gender: document.querySelector('input[name="gender"]:checked')?.value || "",
-        address: document.getElementById("address").value,
-        qualification: document.getElementById("qualification").value,
-        role: document.getElementById("role").value,
-        willing: document.querySelector('input[name="willing"]:checked')?.value || "",
-        teaching: document.querySelector('input[name="teaching"]:checked')?.value || ""
-    };
+        // Collect form data
+        const formData = {
+            name: document.getElementById("name")?.value.trim(),
+            email: document.getElementById("email")?.value.trim(),
+            date: document.getElementById("date")?.value,
+            gender: document.querySelector('input[name="gender"]:checked')?.value || "",
+            address: document.getElementById("address")?.value.trim(),
+            qualification: document.getElementById("qualification")?.value.trim(),
+            role: document.getElementById("role")?.value,
+            willing: document.querySelector('input[name="willing"]:checked')?.value || "",
+            teaching: document.querySelector('input[name="teaching"]:checked')?.value || ""
+        };
 
-    localStorage.setItem("profileData", JSON.stringify(formData));
+        // Validate required fields
+        if (!formData.name || !formData.email || !formData.date || !formData.gender || !formData.address || !formData.qualification || !formData.role) {
+            alert("Please fill in all required fields.");
+            return;
+        }
 
-    alert("Registration Successful!");
-    window.location.href = "profile.html";
+        // Store in local storage
+        localStorage.setItem("profileData", JSON.stringify(formData));
+
+        alert("Registration Successful!");
+        
+        // Redirect to profile page
+        window.location.href="profile.html";
+    });
 });
 
 
@@ -149,7 +161,7 @@ document.getElementById("registrationForm").addEventListener("submit", function(
     localStorage.setItem("studentProfile", JSON.stringify(studentData));
 
     // Redirect to profile page
-    window.location.href = "profile.html";
+    window.location.href = "stuprofile.html";
 });
 
 document.getElementById("registrationForm").addEventListener("submit", function (e) {
@@ -171,7 +183,7 @@ document.getElementById("registrationForm").addEventListener("submit", function 
     localStorage.setItem("studentProfile", JSON.stringify(userData)); // Save data to localStorage
 
     alert("Registration Successful! Redirecting to Profile Page.");
-    window.location.href = "student_profile.html"; // Redirect to profile page
+    window.location.href = "stuprofile.html"; // Redirect to profile page
 });
 
 document.getElementById("registerBtn").addEventListener("click", function(event) {
