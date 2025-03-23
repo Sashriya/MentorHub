@@ -292,6 +292,28 @@
 
             <button type="submit">Register</button>
         </div>
+    <script>
+        document.getElementById("registrationForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const formData = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        date: document.getElementById("date").value,
+        gender: document.querySelector('input[name="gender"]:checked')?.value || "",
+        address: document.getElementById("address").value,
+        qualification: document.getElementById("qualification").value,
+        role: document.getElementById("role").value,
+        willing: document.querySelector('input[name="willing"]:checked')?.value || "",
+        teaching: document.querySelector('input[name="teaching"]:checked')?.value || ""
+    };
+
+    localStorage.setItem("profileData", JSON.stringify(formData));
+
+    alert("Registration Successful!");
+    window.location.href = "profile.html";
+});
+    </script>
         
 
     <script src="script.js"></script>
