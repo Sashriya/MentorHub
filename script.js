@@ -449,3 +449,12 @@ function createAdminUser() {
 // Create admin user when the script loads
 // This ensures there's always an admin account available
 createAdminUser();
+
+   function toggleChatbox() {
+            var chatbox = document.getElementById("chatbox");
+            if (chatbox.style.display === "none" || chatbox.style.display === "") {
+                chatbox.style.display = "block";
+            } else {
+                chatbox.style.display = "none";
+            }
+        }
