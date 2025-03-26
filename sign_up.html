@@ -181,19 +181,70 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            border: none; /* Removes border */
-            outline: none; /* Removes focus outline */
-            box-shadow: none; /* Removes any shadow */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
         }
+
         .whatsapp-button img {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
+        }
+
+        .chatbox {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            padding: 15px;
+        }
+
+        .chatbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbox-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .chatbox-body {
+            margin-top: 10px;
+        }
+
+        .chatbox-body p {
+            margin: 5px 0;
+        }
+
+        .chatbox-footer {
+            margin-top: 10px;
+        }
+
+        .chatbox-footer a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .chatbox-footer a img {
+            margin-right: 5px;
+            width: 30px;
+            height: 30px;
         }
 
         @media(max-width: 700px){
@@ -302,9 +353,24 @@
     </div>
 
 
-    <a href="https://wa.me/919443176161" target="_blank" class="whatsapp-button">
-        <img src="whatsapp.png" alt="WhatsApp">
-    </a>
+  <div class="whatsapp-button" onclick="toggleChatbox()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </div>
+
+    <div class="chatbox" id="chatbox">
+        <div class="chatbox-header">
+            <h3>Hi there!</h3>
+            <span class="close-btn" onclick="toggleChatbox()">&times;</span>
+        </div>
+        <div class="chatbox-body">
+            <p>How can we help you?</p>
+        </div>
+        <div class="chatbox-footer">
+            <a href="https://wa.me/919443176161" target="_blank">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="20" height="20"> Start Chat
+            </a>
+        </div>
+    </div>
 
     
 
@@ -357,6 +423,14 @@
                 alert("Username or email already exists. Please choose another one.");
             }
         });
+        function toggleChatbox() {
+            var chatbox = document.getElementById("chatbox");
+            if (chatbox.style.display === "none" || chatbox.style.display === "") {
+                chatbox.style.display = "block";
+            } else {
+                chatbox.style.display = "none";
+            }
+        }
     </script>
 
 </body>
